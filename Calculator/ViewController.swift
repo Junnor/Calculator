@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     var middleTyping = false
     var isResult = false
-    
+        
     var numberOfPoint = 0
     var operation: String?
     
@@ -38,6 +38,14 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func deleteDigit() {
+        if display.text!.characters.count >= 1 {
+            display.text = String(display.text!.characters.dropLast())
+            if display.text!.characters.count == 0 {
+                display.text = "0"
+            }
+        }
+    }
     
     // MARK: - Operate
     
@@ -45,6 +53,14 @@ class ViewController: UIViewController {
         operation = sender.currentTitle!
         
         if middleTyping {
+            if operation == "ᐩ/-" {
+                if display.text!.containsString("-") {
+                   display.text = String(display.text!.characters.dropFirst())
+                } else {
+                    display.text = "-" + display.text!
+                }
+                return
+            }
             enter()
         }
         
@@ -59,6 +75,8 @@ class ViewController: UIViewController {
         case "sin": performOperation { sin($0) }
         case "cos": performOperation { cos($0) }
         case "π": performOperation { $0 * M_PI }
+        case "%": performOperation{ $0 / 100 }
+        case "ᐩ/-": performOperation { -$0 }
         default: break
         }
     }
@@ -92,15 +110,25 @@ class ViewController: UIViewController {
     var operandStack = [Double]()
     
     @IBAction func enter() {
-        operandStack.append(displayValue)
+        
+        if let newValue = displayValue {
+            operandStack.append(newValue)
+        } else {
+            display.text = nil
+        }
         print("operation stack = \(operandStack)")
         
+        if history.text!.containsString("=") {
+            history.text = String(history.text!.characters.dropLast())
+        }
+
         if !operandStack.isEmpty && !isResult {
             addToHistory(String(operandStack.last!))
         }
-        
+
         if !operandStack.isEmpty && operation != nil && isResult {
             addToHistory(operation!)
+            addToHistory("=")
         }
         
         numberOfPoint = 0
@@ -108,15 +136,18 @@ class ViewController: UIViewController {
         isResult = false
     }
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
-            return Double(display.text!)!
+            return NSNumberFormatter().numberFromString(display.text!)?.doubleValue
         } set {
-            display.text = "\(newValue)"
+            if let new = newValue {
+                display.text = "\(new)"
+            } else {
+                display.text = nil
+            }
             middleTyping = false
         }
     }
-    
     
     func addToHistory(str: String) {
         if let text = history.text {
@@ -125,6 +156,6 @@ class ViewController: UIViewController {
             history.text = str
         }
     }
-
+    
 }
 
