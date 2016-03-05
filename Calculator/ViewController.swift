@@ -17,8 +17,9 @@ class ViewController: UIViewController {
     
     var middleTyping = false
     var isResult = false
-        
     var numberOfPoint = 0
+    
+    // MARK: - Digit stuff
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
@@ -47,7 +48,7 @@ class ViewController: UIViewController {
             }
         }
     }
-        
+    
     // MARK: - Operate
     
     @IBAction func operate(sender: UIButton) {
@@ -73,20 +74,21 @@ class ViewController: UIViewController {
     @IBAction func cleanEverything() {
         history.text = nil
         display.text = "0"
-        middleTyping = false
-        isResult = false
-        numberOfPoint = 0
-        brain.cleanOpStack()
+        cleanProperties()
+        brain.cleanData()
     }
 
+    func cleanProperties() {
+        numberOfPoint = 0
+        middleTyping = false
+        isResult = false
+    }
+    
     // MARK: - Text Display
     
     @IBAction func enter() {
         displayValue = brain.pushOperand(displayValue)
-        
-        numberOfPoint = 0
-        middleTyping = false
-        isResult = false
+        cleanProperties()
     }
     
     var displayValue: Double? {

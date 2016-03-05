@@ -48,7 +48,7 @@ class CalculatorBrain {
         learnOp(Op.UnaryOperation("π") { M_PI * $0 })
     }
     
-    func cleanOpStack() {
+    func cleanData() {
         opStack.removeAll()
     }
     
