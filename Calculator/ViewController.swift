@@ -13,11 +13,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var history: UILabel!
     @IBOutlet weak var display: UILabel!
     
+    var brain = CalculatorBrain()
+    
     var middleTyping = false
     var isResult = false
         
     var numberOfPoint = 0
-    var operation: String?
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
@@ -46,11 +47,11 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+        
     // MARK: - Operate
     
     @IBAction func operate(sender: UIButton) {
-        operation = sender.currentTitle!
+       let operation = sender.currentTitle!
         
         if middleTyping {
             if operation == "ᐩ/-" {
@@ -64,35 +65,9 @@ class ViewController: UIViewController {
             enter()
         }
         
-        isResult = true
+        displayValue = brain.performOperation(operation)
         
-        switch operation! {
-        case "×": performOperation { $0 * $1 }
-        case "÷": performOperation { $1 / $0 }
-        case "+": performOperation { $0 + $1 }
-        case "−": performOperation { $1 - $0 }
-        case "√": performOperation { sqrt($0)}
-        case "sin": performOperation { sin($0) }
-        case "cos": performOperation { cos($0) }
-        case "π": performOperation { $0 * M_PI }
-        case "%": performOperation{ $0 / 100 }
-        case "ᐩ/-": performOperation { -$0 }
-        default: break
-        }
-    }
-    
-    private func performOperation(operation: (Double, Double) -> Double) {
-        if operandStack.count >= 2 {
-            displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
-            enter()
-        }
-    }
-    
-    private func performOperation(operation: Double -> Double) {
-        if operandStack.count >= 1 {
-            displayValue = operation(operandStack.removeLast())
-            enter()
-        }
+        isResult = true
     }
     
     @IBAction func cleanEverything() {
@@ -101,35 +76,13 @@ class ViewController: UIViewController {
         middleTyping = false
         isResult = false
         numberOfPoint = 0
-        operation = nil
-        operandStack.removeAll()
+        brain.cleanOpStack()
     }
 
     // MARK: - Text Display
     
-    var operandStack = [Double]()
-    
     @IBAction func enter() {
-        
-        if let newValue = displayValue {
-            operandStack.append(newValue)
-        } else {
-            display.text = nil
-        }
-        print("operation stack = \(operandStack)")
-        
-        if history.text!.containsString("=") {
-            history.text = String(history.text!.characters.dropLast())
-        }
-
-        if !operandStack.isEmpty && !isResult {
-            addToHistory(String(operandStack.last!))
-        }
-
-        if !operandStack.isEmpty && operation != nil && isResult {
-            addToHistory(operation!)
-            addToHistory("=")
-        }
+        displayValue = brain.pushOperand(displayValue)
         
         numberOfPoint = 0
         middleTyping = false
