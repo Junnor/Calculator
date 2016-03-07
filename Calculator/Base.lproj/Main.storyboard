@@ -65,25 +65,22 @@
                                                 <rect key="frame" x="240" y="0.0" width="120" height="68"/>
                                                 <color key="backgroundColor" red="0.78235176279999996" green="0.69649870629999999" blue="0.2246958889" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                <state key="normal" title="%"/>
+                                                <state key="normal" title="⌫"/>
                                                 <connections>
-                                                    <action selector="operate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="svg-t6-uNi"/>
+                                                    <action selector="deleteDigit" destination="BYZ-38-t0r" eventType="touchUpInside" id="nqM-Ov-G16"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l79-eS-ye6">
                                                 <rect key="frame" x="361" y="0.0" width="119" height="68"/>
                                                 <color key="backgroundColor" red="0.78235176279999996" green="0.69649870629999999" blue="0.2246958889" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                <state key="normal" title="⌫"/>
-                                                <connections>
-                                                    <action selector="deleteDigit" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ryv-Vg-cvv"/>
-                                                </connections>
+                                                <state key="normal" title="→M"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOx-4u-0lV">
                                                 <rect key="frame" x="481" y="0.0" width="119" height="68"/>
                                                 <color key="backgroundColor" red="0.78235176279999996" green="0.69649870629999999" blue="0.2246958889" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                <state key="normal" title="😀"/>
+                                                <state key="normal" title="M"/>
                                             </button>
                                         </subviews>
                                     </stackView>

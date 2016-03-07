@@ -29,6 +29,7 @@ class CalculatorBrain {
     
     private var opStack = [Op]()
     private var knowsOp = [String: Op]()
+    private var variableValues = [String: Double]()
     
     init() {
         
@@ -42,7 +43,6 @@ class CalculatorBrain {
         learnOp(Op.BinaryOperation("-") { $1 - $0 })
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("ᐩ/-") { -$0 })
-        learnOp(Op.UnaryOperation("%") { $0 / 100 })
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.UnaryOperation("π") { M_PI * $0 })
@@ -86,7 +86,11 @@ class CalculatorBrain {
     }
     
     // MARK: - Push Or Perform
-    
+  
+    func pushOperand(symbol: String) -> Double? {
+        return nil
+    }
+  
     func pushOperand(operand: Double?) -> Double? {
         if operand != nil {
             opStack.append(Op.Operand(operand!))
