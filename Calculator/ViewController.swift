@@ -72,6 +72,32 @@ class ViewController: UIViewController {
         isResult = true
     }
     
+    // M
+    @IBAction func setVariable(sender: UIButton) {
+        displayValue = brain.pushOperand(sender.currentTitle!)
+        updateHistoryUI()
+    }
+    
+    // ->M
+    @IBAction func designVariable(sender: UIButton) {
+        
+        guard let value = displayValue else {
+            return
+        }
+        
+        // 可能由于 variableValues = [String: Double] value为double，
+        // 所以brain.variableValues.keys.first第一次为nil
+        
+        brain.variableValues["M"] = value
+        
+        displayValue = brain.evaluate()
+        
+        middleTyping = false
+        
+        updateHistoryUI()
+    }
+    
+
     @IBAction func cleanEverything() {
         history.text = nil
         display.text = "0"

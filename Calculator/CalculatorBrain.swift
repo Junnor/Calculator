@@ -43,7 +43,8 @@ class CalculatorBrain {
     
     private var opStack = [Op]()
     private var knowsOp = [String: Op]()
-    private var variableValues = [String: Double]()
+    
+    var variableValues = [String: Double]()
     
     var description: String {
         get {
@@ -76,6 +77,7 @@ class CalculatorBrain {
     
     func cleanData() {
         opStack.removeAll()
+        variableValues = [String: Double]()
     }
     
     // MARK: - Evaluate
@@ -85,8 +87,8 @@ class CalculatorBrain {
             var remainingOps = ops
             let op = remainingOps.removeLast()
             switch op {
-            case .Variable(let variable):
-                if let value = variableValues[variable] {
+            case .Variable(let key):
+                if let value = variableValues[key] {
                     return (value, remainingOps)
                 } else {
                     return (nil, remainingOps)
@@ -111,7 +113,7 @@ class CalculatorBrain {
         return (nil, ops)
     }
     
-    private func evaluate() -> Double? {
+    func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         print("\(opStack) = \(result) with \(remainder) left over")
         return result
@@ -143,8 +145,8 @@ class CalculatorBrain {
             var restOp = stack
             let op = restOp.removeLast()
             switch op {
-            case .Variable(let symbol):
-                return (symbol, restOp, op.precedence)
+            case .Variable(let key):
+                return (key, restOp, op.precedence)
             case .Operand(let operand):
                 return (operand.description, restOp, op.precedence)
             case .UnaryOperation(let symbol, _):

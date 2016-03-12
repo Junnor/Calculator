@@ -73,12 +73,18 @@
                                                 <color key="backgroundColor" red="0.78235176279999996" green="0.69649870629999999" blue="0.2246958889" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                 <state key="normal" title="→M"/>
+                                                <connections>
+                                                    <action selector="designVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dkb-Q1-hSn"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JOx-4u-0lV">
                                                 <rect key="frame" x="481" y="0.0" width="119" height="70"/>
                                                 <color key="backgroundColor" red="0.78235176279999996" green="0.69649870629999999" blue="0.2246958889" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                 <state key="normal" title="M"/>
+                                                <connections>
+                                                    <action selector="setVariable:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zU4-0p-Qa1"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
