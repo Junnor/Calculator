@@ -11,36 +11,62 @@ import Foundation
 class CalculatorBrain {
 
     private enum Op: CustomStringConvertible {
+        case Variable(String)
         case Operand(Double)
         case UnaryOperation(String, Double -> Double)
-        case BinaryOperation(String, (Double, Double) -> Double)
+        case BinaryOperation(String, Int, (Double, Double) -> Double)
         
         var description: String {
             switch self {
+            case .Variable(let variable):
+                return variable
             case .Operand(let operand):
                 return "\(operand)"
             case .UnaryOperation(let symbol, _):
                 return symbol
-            case .BinaryOperation(let symbol, _):
+            case .BinaryOperation(let symbol, _, _):
                 return symbol
             }
         }
+        
+        var precedence: Int {
+            get {
+                switch self {
+                case BinaryOperation(_, let precedence, _):
+                    return precedence
+                default: return Int.max
+                }
+            }
+        }
+        
     }
     
     private var opStack = [Op]()
     private var knowsOp = [String: Op]()
     private var variableValues = [String: Double]()
     
+    var description: String {
+        get {
+            let remainingStack = opStack
+            var (desc, restOp1, _) = description(remainingStack)
+            while restOp1.count > 0 {
+                let (resDes, restOp2, _) = description(restOp1)
+                desc = resDes + " ," + desc
+                restOp1 = restOp2
+            }
+            return desc + " ="
+        }
+    }
+    
     init() {
-        
         func learnOp(op: Op) {
             knowsOp[op.description] = op
         }
         
-        learnOp(Op.BinaryOperation("×", *))
-        learnOp(Op.BinaryOperation("÷") { $1 / $0 })
-        learnOp(Op.BinaryOperation("+", +))
-        learnOp(Op.BinaryOperation("-") { $1 - $0 })
+        learnOp(Op.BinaryOperation("×", 2, *))
+        learnOp(Op.BinaryOperation("÷", 2) { $1 / $0 })
+        learnOp(Op.BinaryOperation("+", 1, +))
+        learnOp(Op.BinaryOperation("-", 1) { $1 - $0 })
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("ᐩ/-") { -$0 })
         learnOp(Op.UnaryOperation("sin", sin))
@@ -59,6 +85,12 @@ class CalculatorBrain {
             var remainingOps = ops
             let op = remainingOps.removeLast()
             switch op {
+            case .Variable(let variable):
+                if let value = variableValues[variable] {
+                    return (value, remainingOps)
+                } else {
+                    return (nil, remainingOps)
+                }
             case .Operand(let operand):
                 return (operand, remainingOps)
             case .UnaryOperation(_, let operation):
@@ -66,7 +98,7 @@ class CalculatorBrain {
                 if let operand = operandEvaluation.result {
                     return (operation(operand), operandEvaluation.remainingOps)
                 }
-            case .BinaryOperation(_, let operation):
+            case .BinaryOperation(_, _, let operation):
                 let op1Evaluation = evaluate(remainingOps)
                 if let operand1 = op1Evaluation.result {
                     let op2Evaluation = evaluate(op1Evaluation.remainingOps)
@@ -88,7 +120,8 @@ class CalculatorBrain {
     // MARK: - Push Or Perform
   
     func pushOperand(symbol: String) -> Double? {
-        return nil
+        opStack.append(Op.Variable(symbol))
+        return evaluate()
     }
   
     func pushOperand(operand: Double?) -> Double? {
@@ -103,6 +136,34 @@ class CalculatorBrain {
             opStack.append(operation)
         }
         return evaluate()
+    }
+    
+    private func description(stack: [Op]) -> (result: String, restOp: [Op], precedence: Int) {
+        if !stack.isEmpty {
+            var restOp = stack
+            let op = restOp.removeLast()
+            switch op {
+            case .Variable(let symbol):
+                return (symbol, restOp, op.precedence)
+            case .Operand(let operand):
+                return (operand.description, restOp, op.precedence)
+            case .UnaryOperation(let symbol, _):
+                let (resDes, restOp1, _) = description(restOp)
+                return (symbol + "(" + resDes + ")", restOp1, op.precedence)
+            case .BinaryOperation(let symbol, let precedence, _):
+                var (restDes1, restOp1, precedence1) = description(restOp)
+                var (restDes2, restOp2, precedence2) = description(restOp1)
+                if precedence > precedence1 {
+                    restDes1 = "(" + restDes1 + ")"
+                }
+                if precedence > precedence2 {
+                    restDes2 = "(" + restDes2 + ")"
+                }
+
+                return (restDes2 + symbol + restDes1, restOp2, precedence)
+            }
+        }
+        return ("?", stack, Int.max)
     }
     
 }

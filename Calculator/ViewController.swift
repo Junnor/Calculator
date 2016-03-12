@@ -68,6 +68,7 @@ class ViewController: UIViewController {
         
         displayValue = brain.performOperation(operation)
         
+        updateHistoryUI()
         isResult = true
     }
     
@@ -88,6 +89,7 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         displayValue = brain.pushOperand(displayValue)
+        updateHistoryUI()
         cleanProperties()
     }
     
@@ -104,13 +106,9 @@ class ViewController: UIViewController {
         }
     }
     
-    func addToHistory(str: String) {
-        if let text = history.text {
-            history.text! = text + " \(str)"
-        } else {
-            history.text = str
-        }
-    }
     
+    func updateHistoryUI() {
+        history.text = brain.description
+    }
 }
 
