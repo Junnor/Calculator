@@ -45,11 +45,13 @@ class CalculatorBrain {
     private var knowsOp = [String: Op]()
     
     var variableValues = [String: Double]()
+    var formulaDescription = ""
     
     var description: String {
         get {
             let remainingStack = opStack
             var (desc, restOp1, _) = description(remainingStack)
+            formulaDescription = desc  // will used in Graph
             while restOp1.count > 0 {
                 let (resDes, restOp2, _) = description(restOp1)
                 desc = resDes + " ," + desc

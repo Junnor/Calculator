@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CalculatorViewController.swift
 //  Calculator
 //
 //  Created by Junor on 16/3/2.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     @IBOutlet weak var history: UILabel!
     @IBOutlet weak var display: UILabel!
@@ -19,6 +19,26 @@ class ViewController: UIViewController {
     var isResult = false
     var numberOfPoint = 0
     
+    
+    // MARK: - Segue
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "Graphing":
+                var destination = segue.destinationViewController
+                if let naVC = destination as? UINavigationController {
+                    destination = naVC.visibleViewController!
+                }
+                if let graphVC = destination as? GraphViewController {
+                    graphVC.formulaDescription = brain.formulaDescription
+                }
+            default: break
+            }
+        }
+    }
+    
+
     // MARK: - Digit stuff
     
     @IBAction func appendDigit(sender: UIButton) {
@@ -136,5 +156,6 @@ class ViewController: UIViewController {
     func updateHistoryUI() {
         history.text = brain.description
     }
+
 }
 
