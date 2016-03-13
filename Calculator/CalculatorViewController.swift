@@ -31,9 +31,11 @@ class CalculatorViewController: UIViewController {
                     destination = naVC.visibleViewController!
                 }
                 if let graphVC = destination as? GraphViewController {
-                    graphVC.formulaDescription = brain.formulaDescription
+                    graphVC.title = brain.description == "" ?
+                        "Graph" : brain.description.componentsSeparatedByString(", ").last
+                    graphVC.program = brain.program
                 }
-            default: break
+            default: break      
             }
         }
     }
@@ -155,7 +157,7 @@ class CalculatorViewController: UIViewController {
     
     func updateHistoryUI() {
         history.text = brain.description
-    }
+   }
 
 }
 

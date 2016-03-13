@@ -10,15 +10,26 @@ import UIKit
 
 class GraphViewController: UIViewController {
     
-    var formulaDescription: String = "" {
-        didSet {
-            title = "y = " + formulaDescription
+    private var brain = CalculatorBrain()
+    typealias PropertyList = AnyObject
+    var program: PropertyList {
+        get {
+            return brain.program
+        }
+        set {
+            brain.program = newValue
         }
     }
     
     @IBOutlet weak var graphView: GraphView! {
         didSet {
             graphView.dataSource = self
+            graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView, action: "pinchAction:"))
+            graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView, action: "panAction:"))
+            let doubleTapRecognizer = UITapGestureRecognizer(target: graphView, action: "tapAction:")
+            doubleTapRecognizer.numberOfTapsRequired = 2
+            graphView.addGestureRecognizer(doubleTapRecognizer)
+
         }
     }
     
@@ -29,8 +40,14 @@ class GraphViewController: UIViewController {
 
 extension GraphViewController: GraphViewDataSource {
     
-    func pointsForGraphView(sender: GraphView) -> [CGPoint] {
-        return []
+    // 每个 x -> y
+    func y(x: CGFloat) -> CGFloat? {
+        brain.variableValues["M"] = Double(x)
+        if let y = brain.evaluate() {
+            return CGFloat(y)
+        }
+        return nil
     }
+    
 }
 
