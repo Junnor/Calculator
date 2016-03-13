@@ -61,7 +61,7 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func deleteDigit() {
-        if display.text!.characters.count >= 1 {
+        if let _ = display.text?.characters.count {
             display.text = String(display.text!.characters.dropLast())
             if display.text!.characters.count == 0 {
                 display.text = "0"

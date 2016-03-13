@@ -85,8 +85,8 @@
 			isa = PBXGroup;
 			children = (
 				8BF0470C1C9546870088212C /* Main.storyboard */,
-				8BF0470A1C95464E0088212C /* AxesDrawer.swift */,
 				8BF047081C95464A0088212C /* GraphView.swift */,
+				8BF0470A1C95464E0088212C /* AxesDrawer.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -94,8 +94,8 @@
 		8BF047101C9546AE0088212C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				8BF047061C95463F0088212C /* GraphViewController.swift */,
 				8BF047041C95463B0088212C /* CalculatorViewController.swift */,
+				8BF047061C95463F0088212C /* GraphViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";

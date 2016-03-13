@@ -93,7 +93,7 @@ class CalculatorBrain {
         learnOp(Op.BinaryOperation("+", 1, +))
         learnOp(Op.BinaryOperation("−", 1) { $1 - $0 })
         learnOp(Op.UnaryOperation("√", sqrt))
-        learnOp(Op.UnaryOperation("ᐩ/-") { -$0 })
+        learnOp(Op.UnaryOperation("ᐩ/-") { $0 * -1.0})
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.UnaryOperation("π") { M_PI * $0 })

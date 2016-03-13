@@ -10,12 +10,15 @@ import UIKit
 
 class GraphViewController: UIViewController {
     
-    var formulaDescription: String = "formula"
+    var formulaDescription: String = "" {
+        didSet {
+            title = "y = " + formulaDescription
+        }
+    }
     
     @IBOutlet weak var graphView: GraphView! {
         didSet {
-            graphView.delegate = self
-            graphView.formula.text = formulaDescription
+            graphView.dataSource = self
         }
     }
     
@@ -24,7 +27,10 @@ class GraphViewController: UIViewController {
 
 // MARK: - GraphViewDelegate
 
-extension GraphViewController: GraphViewDelegate {
-    // Not implement yet
+extension GraphViewController: GraphViewDataSource {
+    
+    func pointsForGraphView(sender: GraphView) -> [CGPoint] {
+        return []
+    }
 }
 
