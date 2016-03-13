@@ -59,6 +59,28 @@ class CalculatorBrain {
         }
     }
     
+    var program: AnyObject {   // property list
+        get {
+            return opStack.map{ $0.description }
+        }
+        set {
+            if let symbols = newValue as? [String] {
+                var stack = [Op]()
+                for symbol in symbols {
+                    if let op = knowsOp[symbol] {
+                        stack.append(op)
+                    } else if let operand = NSNumberFormatter().numberFromString(symbol)?.doubleValue {
+                        stack.append(.Operand(operand))
+                    } else {
+                        stack.append(.Variable(symbol))
+                    }
+                }
+                opStack = stack
+            }
+            
+        }
+    }
+    
     init() {
         func learnOp(op: Op) {
             knowsOp[op.description] = op
@@ -67,7 +89,7 @@ class CalculatorBrain {
         learnOp(Op.BinaryOperation("×", 2, *))
         learnOp(Op.BinaryOperation("÷", 2) { $1 / $0 })
         learnOp(Op.BinaryOperation("+", 1, +))
-        learnOp(Op.BinaryOperation("-", 1) { $1 - $0 })
+        learnOp(Op.BinaryOperation("−", 1) { $1 - $0 })
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("ᐩ/-") { -$0 })
         learnOp(Op.UnaryOperation("sin", sin))
@@ -116,6 +138,7 @@ class CalculatorBrain {
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         print("\(opStack) = \(result) with \(remainder) left over")
+        print("program = \(program)")
         return result
     }
     
